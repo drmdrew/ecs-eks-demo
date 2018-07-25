@@ -12,7 +12,7 @@ module "echo-service" {
   container_name = "http-echo"
   container_port = "5678"
   host_port = "5678"
-  container_command = ["-text", "Hello ECS!"]
+  container_command = ["-text", "Hello Fargate!"]
 
   log_group_name = "${aws_cloudwatch_log_group.ecs.name}"
   log_group_region = "${var.region}"

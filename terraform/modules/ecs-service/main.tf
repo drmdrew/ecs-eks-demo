@@ -99,11 +99,15 @@ data "template_file" "definition" {
 }
 
 resource "aws_ecs_service" "service" {
+  depends_on      = ["aws_iam_role_policy.cloudwatch"]
   name            = "${var.container_name}"
   cluster         = "${var.cluster_id}"
   task_definition = "${aws_ecs_task_definition.task.arn}"
-  desired_count   = 2 
-  launch_type = "ECS" // other option: "FARGATE"
+  desired_count   = 2
+  launch_type = "FARGATE"
+
+  deployment_minimum_healthy_percent = 100
+  deployment_maximum_percent = 200
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.service.arn}"
