@@ -65,7 +65,6 @@ data "template_file" "definition" {
       "name": "$${container_name}",
       "portMappings": [
         {
-          "hostPort": $${host_port},
           "protocol": "tcp",
           "containerPort": $${container_port}
         }
@@ -103,8 +102,8 @@ resource "aws_ecs_service" "service" {
   name            = "${var.container_name}"
   cluster         = "${var.cluster_id}"
   task_definition = "${aws_ecs_task_definition.task.arn}"
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = 2 
+  launch_type = "ECS" // other option: "FARGATE"
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.service.arn}"
@@ -114,7 +113,8 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     subnets = ["${var.subnet_ids}"]
-    security_groups = ["${aws_security_group.allow_all.id}"]
+    security_groups = ["${aws_security_group.vpc_allow_all.id}"]
+    assign_public_ip = false 
   }
 }
 
@@ -122,10 +122,10 @@ resource "aws_lb" "alb" {
   name               = "${var.container_name}"
   internal           = "${var.internal}"
   load_balancer_type = "application"
-  security_groups    = ["${aws_security_group.allow_all.id}"]
+  security_groups    = ["${aws_security_group.allow_http.id}"]
   subnets            = ["${var.alb_subnet_ids}"]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false 
 }
 
 resource "aws_lb_listener" "service" {
@@ -147,9 +147,28 @@ resource "aws_lb_target_group" "service" {
   target_type = "ip"
 }
 
-resource "aws_security_group" "allow_all" {
-  name        = "allow_all"
+resource "aws_security_group" "vpc_allow_all" {
+  name        = "vpc_allow_all"
   description = "Allow all inbound traffic"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port   = "0"
+    to_port     = "65535"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 0 
+    to_port         = 65535 
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+}
+resource "aws_security_group" "allow_http" {
+  name        = "allow_http"
+  description = "Allow http inbound traffic"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -166,9 +185,16 @@ resource "aws_security_group" "allow_all" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = "443"
+    to_port     = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
-    from_port       = 0
-    to_port         = 0
+    from_port       = 0 
+    to_port         = 65535 
     protocol        = "tcp"
     cidr_blocks     = ["0.0.0.0/0"]
   }
