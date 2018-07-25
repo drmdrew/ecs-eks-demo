@@ -6,7 +6,7 @@ resource "aws_ecs_task_definition" "task" {
   cpu = "${var.container_cpu}"
   memory = "${var.container_memory}"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn = "${aws_iam_role.cloudwatch.id}"
+  execution_role_arn = "${aws_iam_role.cloudwatch.arn}"
 }
 
 resource "aws_iam_role_policy" "cloudwatch" {
@@ -60,17 +60,19 @@ data "template_file" "definition" {
   [
     {
       "essential": true,
-      "memoryReservation": null,
       "image": "$${container_image}",
       "name": "$${container_name}",
       "portMappings": [
         {
-          "protocol": "tcp",
-          "containerPort": $${container_port}
+          "containerPort": $${container_port},
+          "hostPort": $${host_port},
+          "protocol": "tcp"
         }
       ],
       "command": [$${container_command}],
       "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -99,12 +101,12 @@ data "template_file" "definition" {
 }
 
 resource "aws_ecs_service" "service" {
-  depends_on      = ["aws_iam_role_policy.cloudwatch"]
+  // depends_on      = ["aws_iam_role_policy.cloudwatch"]
   name            = "${var.container_name}"
   cluster         = "${var.cluster_id}"
   task_definition = "${aws_ecs_task_definition.task.arn}"
-  desired_count   = 2
-  launch_type = "FARGATE"
+  desired_count   = "${var.desired_count}" 
+  launch_type = "EC2" // Other option: "FARGATE"
 
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent = 200
