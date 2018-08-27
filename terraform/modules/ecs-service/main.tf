@@ -106,7 +106,7 @@ resource "aws_ecs_service" "service" {
   cluster         = "${var.cluster_id}"
   task_definition = "${aws_ecs_task_definition.task.arn}"
   desired_count   = "${var.desired_count}" 
-  launch_type = "EC2" // Other option: "FARGATE"
+  launch_type     = "${var.launch_type}" // "EC2" // Other option: "FARGATE"
 
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent = 200
@@ -121,6 +121,10 @@ resource "aws_ecs_service" "service" {
     subnets = ["${var.subnet_ids}"]
     security_groups = ["${aws_security_group.vpc_allow_all.id}"]
     assign_public_ip = false 
+  }
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
   }
 }
 
@@ -151,6 +155,7 @@ resource "aws_lb_target_group" "service" {
   protocol = "HTTP"
   vpc_id   = "${var.vpc_id}"
   target_type = "ip"
+  deregistration_delay = "10"
 }
 
 resource "aws_security_group" "vpc_allow_all" {

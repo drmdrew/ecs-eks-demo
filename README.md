@@ -14,7 +14,20 @@ aws --profile dev --region us-east-1 s3api put-bucket-versioning --bucket drmdre
 ```
 
 Run terraform in docker
+
+I prefer to run terraform via a docker image. The examples
+shown here use the terraform docker image defined in 
+https://github.com/drmdrew/dockerfiles/tree/master/terraform
+
 ```
 docker run --rm -it -v $HOME/.aws:/home/terraform/.aws -v $(pwd):/terraform drmdrew/terraform init
+```
+
+To make running a dockerized terraform easier there is a small set of shell helper functions defined
+in `deploy-funcs.sh`:
+```
+source ./deploy-funcs.sh
+cd terraform
+terraform-docker init
 ```
 

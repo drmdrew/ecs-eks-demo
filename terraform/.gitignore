@@ -1,2 +1,4 @@
 .terraform
+config-map-aws-auth_eks-1.yaml
+kubeconfig_eks-1
 

@@ -4,6 +4,7 @@ function terraform-docker {
   docker run --rm -it \
     -v $HOME/.aws:/home/terraform/.aws \
     -v $(pwd):/terraform \
+    -e KUBECONFIG=/terraform/kubeconfig_eks-1 \
     drmdrew/terraform $*
 }
 
@@ -30,6 +31,7 @@ function terraform-docker-shell {
   docker run --rm -it \
     -v $HOME/.aws:/home/terraform/.aws \
     -v $(pwd):/terraform \
+    -e KUBECONFIG=/terraform/kubeconfig_eks-1 \
     --entrypoint ash \
     drmdrew/terraform $*
 }

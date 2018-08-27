@@ -63,7 +63,7 @@ module "ecs" {
 
   lc_name = "ecs"
   image_id             = "${data.aws_ami.amazon_linux_ecs.id}"
-  instance_type        = "t2.small"
+  instance_type        = "t2.medium"
   security_groups      = ["${aws_security_group.ecs_allow_all.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.ecs.id}"
   user_data            = "${data.template_file.user_data.rendered}"

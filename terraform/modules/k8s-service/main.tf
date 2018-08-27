@@ -1,3 +1,19 @@
+resource "kubernetes_pod" "pod" {
+  metadata {
+    name = "${var.container_name}"
+    labels {
+      app = "${var.container_name}"
+    }
+  }
+
+  spec {
+    container {
+      image = "${var.container_image}"
+      name  = "${var.container_name}"
+      args = "${var.container_command}"
+    }
+  }
+}
 resource "kubernetes_service" "service" {
   metadata {
     name = "${var.container_name}"
@@ -13,21 +29,5 @@ resource "kubernetes_service" "service" {
     }
 
     type = "LoadBalancer"
-  }
-}
-
-resource "kubernetes_pod" "pod" {
-  metadata {
-    name = "${var.container_name}"
-    labels {
-      app = "${var.container_name}"
-    }
-  }
-
-  spec {
-    container {
-      image = "${var.container_image}"
-      name  = "${var.container_name}"
-    }
   }
 }

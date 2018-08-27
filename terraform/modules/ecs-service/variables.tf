@@ -74,3 +74,8 @@ variable "network_mode" {
     default = "awsvpc"
 }
 
+variable "launch_type" {
+    type = "string"
+    default = "EC2"
+}
+
