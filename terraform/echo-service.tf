@@ -8,7 +8,7 @@ module "echo-service" {
   cluster_id = "${aws_ecs_cluster.ecs.id}"
   subnet_ids = "${module.vpc.private_subnets}"
   alb_subnet_ids = "${module.vpc.public_subnets}"
-  launch_type = "FARGATE"
+  launch_type = "EC2"
   container_image = "hashicorp/http-echo:latest"
   container_name = "http-echo"
   container_port = "5678"
@@ -21,6 +21,7 @@ module "echo-service" {
   log_group_prefix = "http-echo"
 }
 
+/*
 module "echo-service-k8s" {
   source = "./modules/k8s-service"
 
@@ -28,9 +29,10 @@ module "echo-service-k8s" {
   container_name = "http-echo"
   container_port = "5678"
   host_port = "5678"
-  container_command = ["-text", "Hello ECS!"]
+  container_command = ["-text", "Hello EKS!"]
 
   log_group_name = "${aws_cloudwatch_log_group.ecs.name}"
   log_group_region = "${var.region}"
   log_group_prefix = "http-echo"
 }
+*/

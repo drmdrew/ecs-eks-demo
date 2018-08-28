@@ -18,3 +18,8 @@ variable "vpc_cidr" {
     type = "string"
     default = "10.66.0.0/16"
 }
+
+variable "domain_name" {
+    type = "string"
+    default = "ecs-eks-demo.dreamdrew.ca"
+}

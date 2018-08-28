@@ -14,6 +14,12 @@ resource "kubernetes_pod" "pod" {
     }
   }
 }
+
+// TODO: would really like to play with deployment, etc.
+// See https://github.com/terraform-providers/terraform-provider-kubernetes/issues/3
+
+// FIXME: Kubernetes ingress and networking decisions involved here!
+
 resource "kubernetes_service" "service" {
   metadata {
     name = "${var.container_name}"
