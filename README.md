@@ -45,3 +45,14 @@ cd terraform
 terraform-docker init -backend-config=bucket=$S3_BUCKET
 ```
 
+Once you've done a terraform init you can do a plan/apply:
+```
+cd terraform
+terraform-docker apply
+```
+
+When EKS is up and running you can run kubectl from inside the docker
+container too, e.g.:
+```
+terraform-docker-kubectl  describe services
+```
