@@ -31,6 +31,11 @@ https://github.com/drmdrew/dockerfiles/tree/master/terraform
 docker run --rm -it -v $HOME/.aws:/home/terraform/.aws -v $(pwd):/terraform \
   drmdrew/terraform init
 ```
+You can also `docker pull` this terraform image from docker hub
+(it has an auto-buid):
+```
+docker pull drmdrew/terraform:latest
+```
 
 To make running a dockerized terraform easier there is a small set of shell helper functions defined
 in `deploy-funcs.sh`:
