@@ -1,22 +1,0 @@
-* Rebuilt URL to: http-echo-879702526.us-east-1.elb.amazonaws.com/
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 34.192.212.64...
-* TCP_NODELAY set
-* Connected to http-echo-879702526.us-east-1.elb.amazonaws.com (34.192.212.64) port 80 (#0)
-> GET / HTTP/1.1
-> Host: http-echo-879702526.us-east-1.elb.amazonaws.com
-> User-Agent: curl/7.54.0
-> Accept: */*
-> 
-< HTTP/1.1 200 OK
-< Date: Wed, 29 Aug 2018 01:34:56 GMT
-< Content-Type: text/plain; charset=utf-8
-< Content-Length: 11
-< Connection: keep-alive
-< X-App-Name: http-echo
-< X-App-Version: 0.2.3
-< 
-{ [11 bytes data]
-100    11  100    11    0     0     56      0 --:--:-- --:--:-- --:--:--    57
-* Connection #0 to host http-echo-879702526.us-east-1.elb.amazonaws.com left intact
